@@ -18,6 +18,7 @@ function Authenticate({ token }) {
     try {
       if (!token) {
         setErrors("No authentication token available");
+        return;
       }
 
       const response = await fetch(

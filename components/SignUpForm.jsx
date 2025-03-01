@@ -15,6 +15,7 @@ function SignUpForm({ setToken, clearToken }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (username.length < 8) {
       setErrors("Username must be at least eight characters long.");
       return;
@@ -38,6 +39,7 @@ function SignUpForm({ setToken, clearToken }) {
 
       if (!response.ok) {
         setErrors(result.message || "Failed to sign up");
+        return;
       }
 
       setToken(result.token);
