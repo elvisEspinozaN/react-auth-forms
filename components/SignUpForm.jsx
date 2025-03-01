@@ -10,12 +10,18 @@ function SignUpForm({ setToken, clearToken }) {
   const handleUsernameChange = (e) => {
     clearToken();
     setUsername(e.target.value);
+    setSignedInUser(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (username.length < 8) {
       setErrors("Username must be at least eight characters long.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrors("Password must be at least six characters long");
       return;
     }
 
@@ -51,14 +57,20 @@ function SignUpForm({ setToken, clearToken }) {
       <form action="" onSubmit={handleSubmit}>
         <label htmlFor="">
           Username:{" "}
-          <input onChange={handleUsernameChange} value={username} type="text" />
+          <input
+            className="input"
+            onChange={handleUsernameChange}
+            value={username}
+            type="text"
+          />
         </label>
         <label htmlFor="">
           Password:{" "}
           <input
+            className="input"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            type="text"
+            type="password"
           />
         </label>
         <button>Submit</button>

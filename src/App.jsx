@@ -11,7 +11,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="container">
       <SignUpForm setToken={setToken} clearToken={clearToken} />
       <Authenticate token={token} />
     </div>
