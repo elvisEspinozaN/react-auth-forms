@@ -1,13 +1,24 @@
 import React from "react";
 import { useState } from "react";
 
-function SignUpForm() {
+function SignUpForm({ setToken, clearToken }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState(null);
+  const [signedInUser, setSignedInUser] = useState(null);
+
+  const handleUsernameChange = (e) => {
+    clearToken();
+    setUsername(e.target.value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (username.length < 8) {
+      setErrors("Username must be at least eight characters long.");
+      return;
+    }
+
     try {
       const response = await fetch(
         "https://fsa-jwt-practice.herokuapp.com/signup",
@@ -18,24 +29,29 @@ function SignUpForm() {
         }
       );
       const result = await response.json();
-      console.log(result);
+
+      if (!response.ok) {
+        setErrors(result.message || "Failed to sign up");
+      }
+
+      setToken(result.token);
+      setSignedInUser(username);
+      setUsername("");
+      setPassword("");
+      setErrors(null);
     } catch (E) {
-      setErrors(E.message);
+      setErrors(E.message || "An Error occurred. Try again.");
     }
   };
 
   return (
     <div>
-      <h2>Sign Up</h2>
+      {signedInUser ? <h2>Welcome, {signedInUser}</h2> : <h2>Sign Up</h2>}
       {errors && <p>{errors}</p>}
       <form action="" onSubmit={handleSubmit}>
         <label htmlFor="">
           Username:{" "}
-          <input
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            type="text"
-          />
+          <input onChange={handleUsernameChange} value={username} type="text" />
         </label>
         <label htmlFor="">
           Password:{" "}
